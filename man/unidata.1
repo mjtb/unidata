@@ -1,0 +1,32 @@
+.TH UNIDATA 1
+.SH NAME
+unidata \- Prints Unicode character information in a human-readable format.
+.SH SYNOPSIS
+.B unidata
+.I U+XXXX|terms…
+.SH DESCRIPTION
+.B unidata
+is a command-line interface for the Node.js/npm module of the same name. It lets you look up
+information about Unicode characters in the Unicode character database given their U+XXXX code point
+values or to search character names. Information about the character(s) found is printed to
+standard output in a human-readable format.
+.SH OPTIONS
+.TP
+.IR U+XXXX
+Unicode code point in hexadecimal of a single character to index.
+.TP
+.IR terms…
+Search terms which are used to select characters based on a partial match against their names.
+.SH EXIT STATUS
+.TP
+.BR 0
+Successfully found one or more matching characters.
+.TP
+.BR 1
+No characters were found.
+.TP
+.BR 2
+An error occurred loading the Unicode character database. Error details are printed to standard
+error output.
+.SH SEE ALSO
+unichar,iconv

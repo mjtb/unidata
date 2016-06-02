@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+/**
+ *	Command-line interface for unidata lets you look up information about Unicode characters in the
+ *	Unicode character database given their U+XXXX code point values or to search character names.
+ *
+ *	@syntax
+ *		unidata U+XXXX|terms…
+ *	@output
+ *		information about the characters found in human-readable format
+ *	@return
+ *		0 if one or more characters were found; 1 if no characters were found; >1 on error
+ */
+const UnicodeData = require('../unidata.js');
+UnicodeData.promise().then(function() {
+	var chars = [];
+	var re = /U\+[0-9A-F]+/i;
+	for(var i = 2; i < process.argv.length; ++i) {
+		var arg = process.argv[i];
+		if(re.test(arg)) {
+			// Lookup character based on code point
+			chars.push(UnicodeData.get(Number.parseInt(arg.substring(2), 16)));
+		} else {
+			// Search for characters and ranges matching name
+			chars = chars.concat(UnicodeData.find(arg, false, 'cr'));
+		}
+	}
+	var found = false;
+	for(var i = 0; i < chars.length; ++i) {
+		var c = chars[i];
+		if(c) {
+			// E.g., U+0041 (A) LATIN CAPITAL LETTER A [Letter, Uppercase «Lu»]
+			if('general' in c || 'codePoint' in c) {
+				var abbr = c.general || UnicodeData.Category.default;
+				var desc = UnicodeData.Category[abbr];
+				console.log(`${c} [${desc} «${abbr}»]`);
+			} else {
+				console.log(`${c}`);
+			}
+			found = true;
+		}
+	}
+	if(!found) {
+		console.log('No characters found');
+		process.exit(1);
+	} else {
+		process.exit(0);
+	}
+}, function(err) {
+	console.error(err);
+	process.exit(2);
+});

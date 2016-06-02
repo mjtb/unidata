@@ -1,0 +1,32 @@
+.TH UNICHAR 1
+.SH NAME
+unichar \- Prints a string containing Unicode characters given by their U+XXXX code point values.
+.SH SYNOPSIS
+.B unichar
+.I U+XXXX|string…
+.SH DESCRIPTION
+.B unichar
+is a command-line interface for the unidata Node.js/npm module that lets you pipe to stdout strings
+containing Unicode characters specified by their numeric hexadecimal U+XXXX code point values.
+You can also interleave arbitrary strings. The output is suitable to pipe to a file or a
+comamnd-line clipboard utility.
+.SH OPTIONS
+.TP
+.IR U+XXXX…
+Unicode code point in hexadecimal of a single character to output.
+.TP
+.IR string…
+Arbitrary string to output.
+.SH EXIT STATUS
+.TP
+.BR 0
+Successfully output one or more characters.
+.TP
+.BR 1
+No characters were output because none were specified as input.
+.TP
+.BR 2
+An error occurred loading the Unicode character database or parsing the command-line arguments.
+Error details are printed to standard error output.
+.SH SEE ALSO
+unidata,iconv

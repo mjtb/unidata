@@ -1,0 +1,36 @@
+{
+  "name": "unidata",
+  "version": "1.0.0",
+  "description": "Provides detailed Unicode character data sourced directly from www.unicode.org.",
+  "main": "unidata.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "bin": {
+	  "unidata": "./bin/unidata",
+	  "unichar": "./bin/unichar"
+  },
+  "man": {
+	  "unidata": "./man/unidata.1",
+	  "unichar": "./man/unichar.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjtb/unidata.git"
+  },
+  "author": "Michael Trenholm-Boyle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjtb/unidata/issues"
+  },
+  "homepage": "https://github.com/mjtb/unidata#readme",
+  "dependencies": {
+    "fs": "0.0.2",
+    "path": "^0.12.7",
+    "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.2",
+    "should": "^8.4.0"
+  }
+}

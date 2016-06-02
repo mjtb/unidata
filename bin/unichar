@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+/**
+ *	Command-line interface for unidata lets you populate the clipboard with Unicode characters
+ *	given their code points or arbitrary strings.
+ *
+ *	The U+ must be prepended to code point values in hexadecimal. So, to output a literal “U+”
+ *	you must pass it as an argument all its own.
+ *
+ *	@syntax
+ *		unichar U+XXXX|string…
+ *	@output
+ *		UTF-8 encoded string representation of the characters
+ *	@return
+ *		0 if one or more characters were ouptut; 1 if no characters were output; >1 on error
+ */
+const UnicodeData = require('../unidata.js');
+UnicodeData.promise().then(function() {
+	try {
+		var chars = [];
+		var re = /^U\+([0-9A-F]+)$/i;
+		for(var i = 2; i < process.argv.length; ++i) {
+			var a = process.argv[i];
+			var m = re.exec(a);
+			if(m) {
+				chars.push(Number.parseInt(m[1], 16));
+			} else {
+				chars.push(a);
+			}
+		}
+		var rv = UnicodeData.join(chars);
+		if(!rv) {
+			process.exit(1);
+		}
+		process.stdout.write(rv);
+		process.exit(0);
+	} catch(err) {
+		console.error(err);
+		process.exit(2);
+	}
+}, function(err) {
+	console.error(err);
+	process.exit(2);
+});
