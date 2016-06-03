@@ -10,34 +10,34 @@ command-line interface located in `bin/unidata`.
 // Usage: unidata U+0041 U+2026 U+1F577    # lookup code points
 //        unidata quot                     # search for "quot"
 //
-const UnicodeData = require('unidata');
+const UnicodeData = require('mjtb-unidata');
 UnicodeData.promise().then(function() {
-	var chars = [];
-	var re = /U\+[0-9A-F]+/i;
-	for(var i = 2; i < process.argv.length; ++i) {
-		var arg = process.argv[i];
-		if(re.test(arg)) {
-			// Lookup character based on code point
-			chars.push(UnicodeData.get(Number.parseInt(arg.substring(2), 16)));
-		} else {
-			// Search for characters matching name
-			chars = chars.concat(UnicodeData.find(arg));
-		}
-	}
-	var found = false;
-	for(var i = 0; i < chars.length; ++i) {
-		var c = chars[i];
-		if(c) {
-			// E.g., U+0041 (A) LATIN CAPITAL LETTER A [Letter, Uppercase «Lu»]
-			var abbr = c.general || UnicodeData.Categories.default;
-			var desc = UnicodeData.Category[abbr];
-			console.log(`${c} [${desc} «${abbr}»]`);
-			found = true;
-		}
-	}
-	if(!found) {
-		console.log('No characters found');
-	}
+    var chars = [];
+    var re = /U\+[0-9A-F]+/i;
+    for(var i = 2; i < process.argv.length; ++i) {
+        var arg = process.argv[i];
+        if(re.test(arg)) {
+            // Lookup character based on code point
+            chars.push(UnicodeData.get(Number.parseInt(arg.substring(2), 16)));
+        } else {
+            // Search for characters matching name
+            chars = chars.concat(UnicodeData.find(arg));
+        }
+    }
+    var found = false;
+    for(var i = 0; i < chars.length; ++i) {
+        var c = chars[i];
+        if(c) {
+            // E.g., U+0041 (A) LATIN CAPITAL LETTER A [Letter, Uppercase «Lu»]
+            var abbr = c.general || UnicodeData.Categories.default;
+            var desc = UnicodeData.Category[abbr];
+            console.log(`${c} [${desc} «${abbr}»]`);
+            found = true;
+        }
+    }
+    if(!found) {
+        console.log('No characters found');
+    }
 });
 ```
 
@@ -75,9 +75,9 @@ be downloaded.
 
 Two command-line interfaces are available:
 
-*	`unidata` lets you look up the character information given its code point or a partial match to
-	its name.
-*	`unichar` writes to standard output characters given their code points.
+*    `unidata` lets you look up the character information given its code point or a partial match to
+    its name.
+*    `unichar` writes to standard output characters given their code points.
 
 Refer to the `man(1)` pages for these commands for additional information.
 
