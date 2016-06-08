@@ -20,6 +20,14 @@ UnicodeData.promise().then(function() {
 		if(re.test(arg)) {
 			// Lookup character based on code point
 			chars.push(UnicodeData.get(Number.parseInt(arg.substring(2), 16)));
+		} else if(arg.length === 1) {
+			chars.push(UnicodeData.get(arg.charCodeAt(0)));
+		} else if((arg.length === 2) && (arg.charCodeAt(0) >= 0xD800) && (arg.charCodeAt(0) <= 0xDBFF) && (arg.charCodeAt(1) >= 0xDC00) && (arg.charCodeAt(1) <= 0xDFFF)) {
+			var h = arg.charCodeAt(0) - 0xD800;
+			var l = arg.charCodeAt(1) - 0xDC00;
+			var n = (h << 10) | l;
+			console.log('U+' + n.toString(16));
+			chars.push(UnicodeData.get(h << 10 | l));
 		} else {
 			// Search for characters and ranges matching name
 			chars = chars.concat(UnicodeData.find(arg, false, 'cr'));
