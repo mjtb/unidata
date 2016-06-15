@@ -3,17 +3,23 @@
 unidata \- Prints Unicode character information in a human-readable format.
 .SH SYNOPSIS
 .B unidata
-.I U+XXXX|terms…
+.I U+XXXX|char|terms…
 .SH DESCRIPTION
 .B unidata
 is a command-line interface for the Node.js/npm module of the same name. It lets you look up
 information about Unicode characters in the Unicode character database given their U+XXXX code point
-values or to search character names. Information about the character(s) found is printed to
-standard output in a human-readable format.
+values or actual character and lets you search character names. Information about the character(s)
+found is printed to standard output in a human-readable format.
 .SH OPTIONS
 .TP
 .IR U+XXXX
 Unicode code point in hexadecimal of a single character to index.
+.TP
+.IR U+XXXX~YYYY
+Range of Unicode code points in hexadecimal.
+.TP
+.IR char
+A single character to lookup.
 .TP
 .IR terms…
 Search terms which are used to select characters based on a partial match against their names.
@@ -28,5 +34,33 @@ No characters were found.
 .BR 2
 An error occurred loading the Unicode character database. Error details are printed to standard
 error output.
+.SH EXAMPLE
+The following example shows the output for the three different ways of specifying how to search:
+.P
+.BR unidata
+.BR U+00B7
+.IP
+U+007B ({) LEFT CURLY BRACKET [Punctuation, Open «Ps»]
+.P
+.BR unidata
+.BR {
+.IP
+U+007B ({) LEFT CURLY BRACKET [Punctuation, Open «Ps»]
+.P
+.BR unidata
+.BR "\*[lq]left curly bracket\*[rq]"
+.IP
+.BD
+U+007B ({) LEFT CURLY BRACKET [Punctuation, Open «Ps»]
+U+23A7 (⎧) LEFT CURLY BRACKET UPPER HOOK [Symbol, Math «Sm»]
+U+23A8 (⎨) LEFT CURLY BRACKET MIDDLE PIECE [Symbol, Math «Sm»]
+U+23A9 (⎩) LEFT CURLY BRACKET LOWER HOOK [Symbol, Math «Sm»]
+U+23B1 (⎱) UPPER RIGHT OR LOWER LEFT CURLY BRACKET SECTION [Symbol, Math «Sm»]
+U+2774 (❴) MEDIUM LEFT CURLY BRACKET ORNAMENT [Punctuation, Open «Ps»]
+U+FE37 (︷) PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET [Punctuation, Open «Ps»]
+U+FE5B (﹛) SMALL LEFT CURLY BRACKET [Punctuation, Open «Ps»]
+U+FF5B (｛) FULLWIDTH LEFT CURLY BRACKET [Punctuation, Open «Ps»]
+U+0E007B TAG LEFT CURLY BRACKET [Other, Format «Cf»]
+.ED
 .SH SEE ALSO
 unichar,iconv

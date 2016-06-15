@@ -1446,7 +1446,7 @@ UnicodeCharacter.prototype.toString = function() {
 		while(v.length < n) {
 			v = '0' + v;
 		}
-		return 'U+' + u + '…' + v + ' ' + this.name;
+		return 'U+' + u + '~' + v + ' ' + this.name;
 	} else {
 		return JSON.stringify(this);
 	}

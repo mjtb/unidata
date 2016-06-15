@@ -3,6 +3,10 @@
 /**
  *	Command-line interface for unidata lets you look up information about Unicode characters in the
  *	Unicode character database given their U+XXXX code point values or to search character names.
+ *	<p>
+ *	You can search a range of characters by giving a range of code point values separated with
+ *	U+007E (~) TILDE characters e.g., U+2190~21FF will print all of the characters in the
+ *	“Arrows” block.
  *
  *	@syntax
  *		unidata U+XXXX|terms…
@@ -14,12 +18,22 @@
 const UnicodeData = require('../unidata.js');
 UnicodeData.promise().then(function() {
 	var chars = [];
-	var re = /U\+[0-9A-F]+/i;
+	var re = /U\+([0-9A-F]+)(~[0-9A-F]+)?/i;
 	for(var i = 2; i < process.argv.length; ++i) {
 		var arg = process.argv[i];
-		if(re.test(arg)) {
+		var m = re.exec(arg);
+		if(m) {
 			// Lookup character based on code point
-			chars.push(UnicodeData.get(Number.parseInt(arg.substring(2), 16)));
+			var cm = Number.parseInt(m[1], 16);
+			var cn = (m.length >= 2) ? Number.parseInt(m[2].substring(1), 16) : cm;
+			if(cm > cn) {
+				var t = cm;
+				cm = cn;
+				cn = t;
+			}
+			for(var j = cm; j <= cn; ++j) {
+				chars.push(UnicodeData.get(j));
+			}
 		} else if(arg.length === 1) {
 			chars.push(UnicodeData.get(arg.charCodeAt(0)));
 		} else if((arg.length === 2) && (arg.charCodeAt(0) >= 0xD800) && (arg.charCodeAt(0) <= 0xDBFF) && (arg.charCodeAt(1) >= 0xDC00) && (arg.charCodeAt(1) <= 0xDFFF)) {
