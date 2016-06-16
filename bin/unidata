@@ -25,7 +25,7 @@ UnicodeData.promise().then(function() {
 		if(m) {
 			// Lookup character based on code point
 			var cm = Number.parseInt(m[1], 16);
-			var cn = (m.length >= 2) ? Number.parseInt(m[2].substring(1), 16) : cm;
+			var cn = m[2] ? Number.parseInt(m[2].substring(1), 16) : cm;
 			if(cm > cn) {
 				var t = cm;
 				cm = cn;

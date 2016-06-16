@@ -1434,7 +1434,7 @@ UnicodeCharacter.prototype.toString = function() {
 		}
 		return 'U+'
 			+ u
-			+ (this.isPrintable() ? (' (' + String.fromCharCode(this.codePoint) + ') ') : ' ')
+			+ (this.isPrintable() ? (' (' + this.string() + ') ') : ' ')
 			+ this.name;
 	} else if('first' in this && 'last' in this) {
 		var u = this.first.toString(16).toUpperCase();
