@@ -17,18 +17,18 @@
 const UnicodeData = require('../unidata.js');
 UnicodeData.promise().then(function() {
 	try {
-		var chars = [];
-		var re = /^U\+([0-9A-F]+)$/i;
-		for(var i = 2; i < process.argv.length; ++i) {
-			var a = process.argv[i];
-			var m = re.exec(a);
+		let chars = [];
+		let re = /^U\+([0-9A-F]+)$/i;
+		for(let i = 2; i < process.argv.length; ++i) {
+			let a = process.argv[i];
+			let m = re.exec(a);
 			if(m) {
 				chars.push(Number.parseInt(m[1], 16));
 			} else {
 				chars.push(a);
 			}
 		}
-		var rv = UnicodeData.join(chars);
+		let rv = UnicodeData.join(chars);
 		if(!rv) {
 			process.exit(1);
 		}

@@ -59,7 +59,7 @@ require('util').inherits(UnicodeData, EventEmitter);
 
 function DefaultCacheLocation(cachedir) {
 	const os = require('os');
-	var cachedirs;
+	let cachedirs;
 	if(cachedir) {
 		// Use the cachedir provided.
 		if(Array.isArray(cachedir)) {
@@ -147,13 +147,13 @@ UnicodeData.prototype.toJSON = function() {
  *	@return {Promise}
  */
 UnicodeData.prototype.uncache = function(cachedir) {
-	var cc = function(res, rej) {
+	let cc = function(res, rej) {
 		const path = require('path');
 		const fs = require('fs');
-		var cf = DefaultCacheLocation(cachedir || this.cache).join(path.sep);
-		var jsfile = path.join(cf, 'UnicodeData.js');
-		var txtfile = path.join(cf, 'UnicodeData.txt');
-		var blkfile = path.join(cf, 'Blocks.txt');
+		let cf = DefaultCacheLocation(cachedir || this.cache).join(path.sep);
+		let jsfile = path.join(cf, 'UnicodeData.js');
+		let txtfile = path.join(cf, 'UnicodeData.txt');
+		let blkfile = path.join(cf, 'Blocks.txt');
 		if(!cachedir) {
 			delete this.cache;
 		}
@@ -188,7 +188,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 	const path = require('path');
 	const day = 1000 * 60 * 60 * 24;
 	const year = day * 365;
-	var setReadyState, exists, mkdirs, validateunidata, parsetextfields, parsetextdata,
+	let setReadyState, exists, mkdirs, validateunidata, parsetextfields, parsetextdata,
 		parsetextfile, gettextfile, loadtextfile, parsejsdata, loadjsfile, loadfolder, main,
 		resolved, rejected, prom, loadfromcache, parseblkfile, loadblkfile, getblkfile,
 		parseblockfields;
@@ -239,7 +239,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 	setReadyState = function(next) {
 		// Changes the readyState, emitting the readystatechange event if different.
 		if(this.readyState !== next) {
-			var prev = this.readyState;
+			let prev = this.readyState;
 			this.readyState = next;
 			/**
 			 *	Occurs when the ready state of the object changes during initialization.
@@ -254,7 +254,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 	main = function() {
 		// Try to load the UnicodeData.js file from the node module directory.
 		setReadyState(this.ReadyState.INITIALIZING);
-		var jsfile = path.join(__dirname, 'UnicodeData.js');
+		let jsfile = path.join(__dirname, 'UnicodeData.js');
 		exists(jsfile, 'file', function(flag, fname, fmode, err, st) {
 			if(flag) {
 				loadjsfile(jsfile);
@@ -292,9 +292,9 @@ UnicodeData.prototype.reload = function(cachedir) {
 	loadfolder = function(folder) {
 		// Load the JSON file if it exists, otherwise load the text file.
 		this.cache = folder;
-		var jsfile = path.join(folder, 'UnicodeData.js');
-		var txtfile = path.join(folder, 'UnicodeData.txt');
-		var blkfile = path.join(folder, 'Blocks.txt');
+		let jsfile = path.join(folder, 'UnicodeData.js');
+		let txtfile = path.join(folder, 'UnicodeData.txt');
+		let blkfile = path.join(folder, 'Blocks.txt');
 		exists(jsfile, 'file', function(flag, fname, fmode, err, st) {
 			if(flag) {
 				loadjsfile(jsfile, txtfile, blkfile);
@@ -327,16 +327,16 @@ UnicodeData.prototype.reload = function(cachedir) {
 		// the result is valid, move to the READY state. Otherwise, discard and try loading the
 		// text file instead.
 		setReadyState(this.ReadyState.LOADING);
-		var unidata;
+		let unidata;
 		try {
-			var src = JSON.parse(data);
-			for(var i in src.characters) {
-				var c = new UnicodeCharacter();
+			let src = JSON.parse(data);
+			for(let i in src.characters) {
+				let c = new UnicodeCharacter();
 				Object.assign(c, src.characters[i]);
 				this.characters[i] = c;
 			}
-			for(var i = 0; i < src.ranges.length; ++i) {
-				var c = new UnicodeCharacter();
+			for(let i = 0; i < src.ranges.length; ++i) {
+				let c = new UnicodeCharacter();
 				Object.assign(c, src.ranges[i]);
 				this.ranges.push(c);
 			}
@@ -395,7 +395,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 	gettextfile = function(txtfile, blkfile, jsfile) {
 		// Download the text file and parse it.
 		setReadyState(this.ReadyState.DOWNLOADING);
-		var req = require('request')
+		let req = require('request')
 		.get('http://www.unicode.org/Public/UNIDATA/UnicodeData.txt');
 		req.on('error', function (err) {
 			setReadyState(this.ReadyState.UNINITIALIZED);
@@ -404,14 +404,14 @@ UnicodeData.prototype.reload = function(cachedir) {
 			setImmediate(rejected, err);
 		}.bind(this))
 		.on('response', function(response) {
-			var datestr = response.headers['date'];
-			var laststr = response.headers['last-modified'];
-			var date = new Date(datestr);
-			var last = laststr ? new Date(laststr) : date;
-			var delta = Math.abs(date.valueOf() - last.valueOf());
-			var now = new Date();
+			let datestr = response.headers['date'];
+			let laststr = response.headers['last-modified'];
+			let date = new Date(datestr);
+			let last = laststr ? new Date(laststr) : date;
+			let delta = Math.abs(date.valueOf() - last.valueOf());
+			let now = new Date();
 			last = new Date(now.valueOf() - delta);
-			var expiry = new Date(Math.min(now.valueOf() + year,
+			let expiry = new Date(Math.min(now.valueOf() + year,
 				Math.max(date.valueOf() + year, last.valueOf() + year)));
 			this.headers = new UnidataHeaders(now, last, expiry);
 		}.bind(this))
@@ -426,7 +426,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 	getblkfile = function(txtfile, blkfile, jsfile) {
 		// Download the text file and parse it.
 		setReadyState(this.ReadyState.DOWNLOADING);
-		var req = require('request')
+		let req = require('request')
 		.get('http://www.unicode.org/Public/UNIDATA/Blocks.txt');
 		req.on('error', function (err) {
 			setReadyState(this.ReadyState.UNINITIALIZED);
@@ -478,7 +478,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 		// the set of parsed records into invidual characters and character ranges. Cache the parsed
 		// records as JSON formatted data. If all ends well, move to the READY state.
 		setReadyState(this.ReadyState.PARSING);
-		var parsed = txtdata.split('\n').map(
+		let parsed = txtdata.split('\n').map(
 			(currentValue, index, array) => parsetextfields(currentValue)
 		);
 		this.characters = parsed.reduce(function(previousValue,currentValue,currentIndex,array) {
@@ -487,7 +487,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 			}
 			return previousValue;
 		}, {});
-		var blocks = blkdata.split('\n').map(
+		let blocks = blkdata.split('\n').map(
 			(currentValue, index, array) => parseblockfields(currentValue)
 		);
 		this.ranges = parsed.concat(blocks)
@@ -511,10 +511,10 @@ UnicodeData.prototype.reload = function(cachedir) {
 			}
 		})
 		.reduce(function(previousValue,currentValue,currentIndex,array) {
-			var push = true;
-			for(var i = 0; i < previousValue.length; ++i) {
+			let push = true;
+			for(let i = 0; i < previousValue.length; ++i) {
 				if((previousValue[i].first === currentValue.first) && (currentValue.last > previousValue[i].last)) {
-					for(var k in currentValue) {
+					for(let k in currentValue) {
 						switch(k) {
 							default:
 								previousValue[i][k] = currentValue[k];
@@ -554,17 +554,17 @@ UnicodeData.prototype.reload = function(cachedir) {
 		if(!line || (line.charAt(0) === '#')) { // Ignore blanks and comments
 			return null;
 		}
-		var dotdot = line.indexOf('..');
-		var semicolon = line.indexOf(';');
+		let dotdot = line.indexOf('..');
+		let semicolon = line.indexOf(';');
 		if((dotdot < 2) || (semicolon < (dotdot+2))) { // Require at least two hex digits
 			return null;
 		}
-		var fstr = line.substr(0,dotdot);
-		var fnum = Number.parseInt(fstr, 16);
-		var lstr = line.substr(dotdot+2,semicolon-dotdot-2);
-		var lnum = Number.parseInt(lstr, 16);
-		var nstr = line.substr(semicolon+1).trim();
-		var fields = {
+		let fstr = line.substr(0,dotdot);
+		let fnum = Number.parseInt(fstr, 16);
+		let lstr = line.substr(dotdot+2,semicolon-dotdot-2);
+		let lnum = Number.parseInt(lstr, 16);
+		let nstr = line.substr(semicolon+1).trim();
+		let fields = {
 			'first': fnum,
 			'last': lnum,
 			'name': nstr
@@ -581,8 +581,8 @@ UnicodeData.prototype.reload = function(cachedir) {
 		if(!line || (line.charAt(0) === '#')) {
 			return null;
 		}
-		var fields = line.split(';');
-		for(var i = 0; i < fields.length; ++i) {
+		let fields = line.split(';');
+		for(let i = 0; i < fields.length; ++i) {
 			fields[i] = fields[i].trim();
 		}
 		if((fields.length < 1) || (fields[0] === '')) {
@@ -595,8 +595,8 @@ UnicodeData.prototype.reload = function(cachedir) {
 	validateunidata = function(unidata) {
 		// Verify the parsed JSON data has not expired.
 		if(unidata && typeof(unidata) === 'object' && 'headers' in unidata) {
-			var expires = new Date(unidata.headers.expires);
-			var now = new Date();
+			let expires = new Date(unidata.headers.expires);
+			let now = new Date();
 			return expires.valueOf() > now.valueOf();
 		}
 		return false;
@@ -609,8 +609,8 @@ UnicodeData.prototype.reload = function(cachedir) {
 		if(dirs.length === 0) {
 			handler(cwd, null);
 		} else {
-			var cd = dirs.shift();
-			var pwd = cwd ? path.join(cwd, cd) : cd;
+			let cd = dirs.shift();
+			let pwd = cwd ? path.join(cwd, cd) : cd;
 			exists(pwd, 'd', function(flag, fname, fmode, err, st) {
 				if(flag) {
 					mkdirs(dirs, handler, pwd);
@@ -693,12 +693,12 @@ UnicodeData.prototype.reload = function(cachedir) {
  *	@return {UnicodeCharacter|Array<UnicodeCharacter>}
  */
 UnicodeData.prototype.find = function(filter, unique, selection) {
-	var rv = [];
+	let rv = [];
 	if(typeof(filter) === "string") {
-		var t = filter.toUpperCase();
+		let t = filter.toUpperCase();
 		if(!selection || (selection.indexOf('c') >= 0)) {
-			for(var i in this.characters) {
-				var c = this.characters[i];
+			for(let i in this.characters) {
+				let c = this.characters[i];
 				if(c.name.indexOf(t) >= 0) {
 					if(unique) {
 						return c;
@@ -709,8 +709,8 @@ UnicodeData.prototype.find = function(filter, unique, selection) {
 			}
 		}
 		if(selection && (selection.indexOf('r') >= 0)) {
-			for(var i = 0; i < this.ranges.length; ++i) {
-				var r = this.ranges[i];
+			for(let i = 0; i < this.ranges.length; ++i) {
+				let r = this.ranges[i];
 				if(r.name.toUpperCase().indexOf(t) >= 0) {
 					if(unique) {
 						return r;
@@ -722,8 +722,8 @@ UnicodeData.prototype.find = function(filter, unique, selection) {
 		}
 	} else if(typeof(filter) === "function") {
 		if(!selection || selection.indexOf('c') >= 0) {
-			for(var i in this.characters) {
-				var c = this.characters[i];
+			for(let i in this.characters) {
+				let c = this.characters[i];
 				if(filter(c)) {
 					if(unique) {
 						return c;
@@ -734,8 +734,8 @@ UnicodeData.prototype.find = function(filter, unique, selection) {
 			}
 		}
 		if(selection && selection.indexOf('r') >= 0) {
-			for(var i = 0; i < this.ranges.length; ++i) {
-				var r = this.ranges[i];
+			for(let i = 0; i < this.ranges.length; ++i) {
+				let r = this.ranges[i];
 				if(filter(r)) {
 					if(unique) {
 						return r;
@@ -767,12 +767,12 @@ UnicodeData.prototype.find = function(filter, unique, selection) {
  *	@return {UnicodeCharacter}
  */
 UnicodeData.prototype.get = function(codePoint) {
-	var cc = Number(codePoint);
+	let cc = Number(codePoint);
 	if(cc in this.characters) {
 		return this.characters[cc];
 	}
-	for(var i = 0; i < this.ranges.length; ++i) {
-		var r = this.ranges[i];
+	for(let i = 0; i < this.ranges.length; ++i) {
+		let r = this.ranges[i];
 		if(cc >= r.first && cc <= r.last) {
 			return r;
 		}
@@ -788,9 +788,9 @@ UnicodeData.prototype.get = function(codePoint) {
  *	@return {Array<number>}
  */
 UnicodeData.prototype.split = function(str) {
-	var rv = [];
-	for(var i = 0; i < str.length; ++i) {
-		var c = str.charCodeAt(i);
+	let rv = [];
+	for(let i = 0; i < str.length; ++i) {
+		let c = str.charCodeAt(i);
 
 	}
 }
@@ -804,10 +804,10 @@ UnicodeData.prototype.split = function(str) {
  *	@return {string}
  */
 UnicodeData.prototype.join = function(codepoints) {
-	var args = Array.from(arguments);
-	var rv = '';
-	for(var i = 0; i < args.length; ++i) {
-		var a = args[i];
+	let args = Array.from(arguments);
+	let rv = '';
+	for(let i = 0; i < args.length; ++i) {
+		let a = args[i];
 		if(typeof(a) === 'number') {
 			rv += (new UnicodeCharacter({ codePoint: a})).string();
 		} else if(typeof(a) === 'string') {
@@ -1193,7 +1193,7 @@ function UnicodeCharacter(fields) {
 			this.general = fields[2];
 		}
 		if(fields[3]) {
-			var n = Number.parseInt(fields[3]);
+			let n = Number.parseInt(fields[3]);
 			if(n !== UnicodeData.prototype.Combining['default']) {
 				/**
 				 *	The numeric value of this character’s combining class as given in the Unicode
@@ -1220,12 +1220,12 @@ function UnicodeCharacter(fields) {
 			this.bidi = fields[4];
 		}
 		if(fields[5]) {
-			var subfields = fields[5].split(' ').map(
+			let subfields = fields[5].split(' ').map(
 				(x) => /\<\w+\>/.test(x) ? x.substring(1,x.length-1) : Number.parseInt(x, 16)
 			);
-			var decomp = {};
-			var tag = UnicodeData.prototype.Decomposition['default'];
-			for(var i = 0; i < subfields.length; ++i) {
+			let decomp = {};
+			let tag = UnicodeData.prototype.Decomposition['default'];
+			for(let i = 0; i < subfields.length; ++i) {
 				if(typeof(subfields[i]) === 'number') {
 					if(tag in decomp) {
 						decomp[tag].push(subfields[i]);
@@ -1320,7 +1320,7 @@ function UnicodeCharacter(fields) {
 			 */
 			this.uppercase = Number.parseInt(fields[12], 16);
 			if(fields[14]) {
-				var tc = Number.parseInt(fields[14], 16);
+				let tc = Number.parseInt(fields[14], 16);
 				if(tc !== this.uppercase) {
 					/**
 					 *	The numeric value of the code point of the character that is the title case
@@ -1391,7 +1391,7 @@ function UnicodeCharacter(fields) {
 			'name', 'general', 'combining', 'bidi', 'decomp', 'decimal', 'digit', 'numeric',
 			'mirrored', 'oldname', 'comment', 'uppercase', 'titlecase', 'lowercase'
 		];
-		for(var i = 0; i < subfields.length; ++i) {
+		for(let i = 0; i < subfields.length; ++i) {
 			if(subfields[i] in fields) {
 				this[subfields[i]] = fields[subfields[i]];
 			}
@@ -1420,15 +1420,15 @@ UnicodeCharacter.prototype.isPrintable = function() {
  *	@return {string}
  */
 UnicodeCharacter.prototype.toString = function() {
-	var g = UnicodeData.prototype.Category[
+	let g = UnicodeData.prototype.Category[
 		this.general || UnicodeData.prototype.Category['default']
 	];
-	var b = UnicodeData.prototype.Bidirectionality[
+	let b = UnicodeData.prototype.Bidirectionality[
 		this.bidi || UnicodeData.prototype.Bidirectionality['default']
 	];
 	if('codePoint' in this) {
-		var u = this.codePoint.toString(16).toUpperCase();
-		var n = this.codePoint < 0xFFFF ? 4 : 6;
+		let u = this.codePoint.toString(16).toUpperCase();
+		let n = this.codePoint < 0xFFFF ? 4 : 6;
 		while(u.length < n) {
 			u = '0' + u;
 		}
@@ -1437,9 +1437,9 @@ UnicodeCharacter.prototype.toString = function() {
 			+ (this.isPrintable() ? (' (' + this.string() + ') ') : ' ')
 			+ this.name;
 	} else if('first' in this && 'last' in this) {
-		var u = this.first.toString(16).toUpperCase();
-		var v = this.last.toString(16).toUpperCase();
-		var n = Math.max(this.first, this.last) < 0xFFFF ? 4 : 6;
+		let u = this.first.toString(16).toUpperCase();
+		let v = this.last.toString(16).toUpperCase();
+		let n = Math.max(this.first, this.last) < 0xFFFF ? 4 : 6;
 		while(u.length < n) {
 			u = '0' + u;
 		}
@@ -1493,7 +1493,7 @@ UnicodeCharacter.prototype.utf16 = function() {
 		|| (this.codePoint >= 0xE000 && this.codePoint <= 0xFFFF)) {
 		return Uint16Array.of( this.codePoint );
 	} else if(this.codePoint >= 0x10000 && this.codePoint <= 0x10FFFF) {
-		var x = this.codePoint - 0x10000;
+		let x = this.codePoint - 0x10000;
 		return Uint16Array.of( 0xD800 + ((x >> 10) & 0x3FF), 0xDC00 + (x & 0x3FF) );
 	} else {
 		throw new Error(`Invalid code point: ${this.codePoint}`);
@@ -1510,7 +1510,7 @@ UnicodeCharacter.prototype.string = function() {
 		|| (this.codePoint >= 0xE000 && this.codePoint <= 0xFFFF)) {
 		return String.fromCharCode( this.codePoint );
 	} else if(this.codePoint >= 0x10000 && this.codePoint <= 0x10FFFF) {
-		var x = this.codePoint - 0x10000;
+		let x = this.codePoint - 0x10000;
 		return String.fromCharCode(0xD800 + ((x >> 10) & 0x3FF)) + String.fromCharCode(0xDC00 + (x & 0x3FF));
 	} else {
 		throw new Error(`Invalid code point: ${this.codePoint}`);
@@ -1534,7 +1534,7 @@ function Fraction(n, d) {
 	if(typeof(n) === "number") {
 		this.numerator = n;
 	} else if(typeof(n) === "string") {
-		var slash = n.indexOf('/');
+		let slash = n.indexOf('/');
 		if(slash > 0) {
 			/**
 			 *	The numerator of the fraction.
@@ -1590,7 +1590,7 @@ if((require.main.filename === __filename) && (process.argv.length > 2) && (proce
 	console.log('Clearing cache and source data files…');
 	console.log('    » ' + DefaultCacheLocation().join(path.sep));
 	console.log('    » ' + path.join(__dirname, 'UnicodeData.js'));
-	var p = new Promise(function(res,rej) {
+	let p = new Promise(function(res,rej) {
 		fs.unlink(path.join(__dirname, 'UnicodeData.js'), function(err) {
 			setImmediate(res);
 		});
@@ -1598,7 +1598,7 @@ if((require.main.filename === __filename) && (process.argv.length > 2) && (proce
 	Promise.all([module.exports.uncache(), p]).then(function() {
 		console.log('Rebuilding cache…');
 		module.exports.reload().promise().then(function(unidata) {
-			var dstfile = path.join(__dirname, 'UnicodeData.js');
+			let dstfile = path.join(__dirname, 'UnicodeData.js');
 			console.log(`Writing… ${dstfile}`);
 			fs.writeFile(dstfile, JSON.stringify(unidata), { encoding: 'utf8' }, function(err) {
 				if(err) {

@@ -17,29 +17,29 @@
  */
 const UnicodeData = require('../unidata.js');
 UnicodeData.promise().then(function() {
-	var chars = [];
-	var re = /U\+([0-9A-F]+)(~[0-9A-F]+)?/i;
-	for(var i = 2; i < process.argv.length; ++i) {
-		var arg = process.argv[i];
-		var m = re.exec(arg);
+	let chars = [];
+	let re = /U\+([0-9A-F]+)(~[0-9A-F]+)?/i;
+	for(let i = 2; i < process.argv.length; ++i) {
+		let arg = process.argv[i];
+		let m = re.exec(arg);
 		if(m) {
 			// Lookup character based on code point
-			var cm = Number.parseInt(m[1], 16);
-			var cn = m[2] ? Number.parseInt(m[2].substring(1), 16) : cm;
+			let cm = Number.parseInt(m[1], 16);
+			let cn = m[2] ? Number.parseInt(m[2].substring(1), 16) : cm;
 			if(cm > cn) {
-				var t = cm;
+				let t = cm;
 				cm = cn;
 				cn = t;
 			}
-			for(var j = cm; j <= cn; ++j) {
+			for(let j = cm; j <= cn; ++j) {
 				chars.push(UnicodeData.get(j));
 			}
 		} else if(arg.length === 1) {
 			chars.push(UnicodeData.get(arg.charCodeAt(0)));
 		} else if((arg.length === 2) && (arg.charCodeAt(0) >= 0xD800) && (arg.charCodeAt(0) <= 0xDBFF) && (arg.charCodeAt(1) >= 0xDC00) && (arg.charCodeAt(1) <= 0xDFFF)) {
-			var h = arg.charCodeAt(0) - 0xD800;
-			var l = arg.charCodeAt(1) - 0xDC00;
-			var n = (h << 10) | l;
+			let h = arg.charCodeAt(0) - 0xD800;
+			let l = arg.charCodeAt(1) - 0xDC00;
+			let n = (h << 10) | l;
 			console.log('U+' + n.toString(16));
 			chars.push(UnicodeData.get(h << 10 | l));
 		} else {
@@ -47,14 +47,14 @@ UnicodeData.promise().then(function() {
 			chars = chars.concat(UnicodeData.find(arg, false, 'cr'));
 		}
 	}
-	var found = false;
-	for(var i = 0; i < chars.length; ++i) {
-		var c = chars[i];
+	let found = false;
+	for(let i = 0; i < chars.length; ++i) {
+		let c = chars[i];
 		if(c) {
 			// E.g., U+0041 (A) LATIN CAPITAL LETTER A [Letter, Uppercase «Lu»]
 			if('general' in c || 'codePoint' in c) {
-				var abbr = c.general || UnicodeData.Category.default;
-				var desc = UnicodeData.Category[abbr];
+				let abbr = c.general || UnicodeData.Category.default;
+				let desc = UnicodeData.Category[abbr];
 				console.log(`${c} [${desc} «${abbr}»]`);
 			} else {
 				console.log(`${c}`);
