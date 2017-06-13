@@ -354,7 +354,7 @@ UnicodeData.prototype.reload = function(cachedir) {
 				setImmediate(resolved, this);
 			} else {
 				if(txtfile) {
-					loadtextfile(txtfile, jsfile);
+					loadtextfile(txtfile, blkfile, jsfile);
 				} else {
 					// The attempt to load the UnicodeData.js file from the node module directory
 					// failed. Load it from the cache instead.
