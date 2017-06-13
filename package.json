@@ -1,6 +1,6 @@
 {
   "name": "mjtb-unidata",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Provides detailed Unicode character data sourced directly from www.unicode.org.",
   "main": "unidata.js",
   "scripts": {
