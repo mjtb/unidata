@@ -16,7 +16,7 @@
  *		0 if one or more characters were found; 1 if no characters were found; >1 on error
  */
 const UnicodeData = require('../unidata.js');
-UnicodeData.promise().then(function() {
+UnicodeData.instance().promise().then(function() {
 	let chars = [];
 	let re = /U\+([0-9A-F]+)(~[0-9A-F]+)?/i;
 	for(let i = 2; i < process.argv.length; ++i) {
@@ -32,19 +32,19 @@ UnicodeData.promise().then(function() {
 				cn = t;
 			}
 			for(let j = cm; j <= cn; ++j) {
-				chars.push(UnicodeData.get(j));
+				chars.push(UnicodeData.instance().get(j));
 			}
 		} else if(arg.length === 1) {
-			chars.push(UnicodeData.get(arg.charCodeAt(0)));
+			chars.push(UnicodeData.instance().get(arg.charCodeAt(0)));
 		} else if((arg.length === 2) && (arg.charCodeAt(0) >= 0xD800) && (arg.charCodeAt(0) <= 0xDBFF) && (arg.charCodeAt(1) >= 0xDC00) && (arg.charCodeAt(1) <= 0xDFFF)) {
 			let h = arg.charCodeAt(0) - 0xD800;
 			let l = arg.charCodeAt(1) - 0xDC00;
 			let n = (h << 10) | l;
 			console.log('U+' + n.toString(16));
-			chars.push(UnicodeData.get(h << 10 | l));
+			chars.push(UnicodeData.instance().get(h << 10 | l));
 		} else {
 			// Search for characters and ranges matching name
-			chars = chars.concat(UnicodeData.find(arg, false, 'cr'));
+			chars = chars.concat(UnicodeData.instance().find(arg, false, 'cr'));
 		}
 	}
 	let found = false;

@@ -1,4 +1,4 @@
-# UnicodeData
+# mjtb-unidata
 
 This module provides an API for looking up characters in the Unicode public character
 database downloadable at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
@@ -11,17 +11,17 @@ command-line interface located in `bin/unidata`.
 //        unidata quot                     # search for "quot"
 //
 const UnicodeData = require('mjtb-unidata');
-UnicodeData.promise().then(function() {
+UnicodeData.instance().promise().then(function() {
     var chars = [];
     var re = /U\+[0-9A-F]+/i;
     for(var i = 2; i < process.argv.length; ++i) {
         var arg = process.argv[i];
         if(re.test(arg)) {
             // Lookup character based on code point
-            chars.push(UnicodeData.get(Number.parseInt(arg.substring(2), 16)));
+            chars.push(UnicodeData.instance().get(Number.parseInt(arg.substring(2), 16)));
         } else {
             // Search for characters matching name
-            chars = chars.concat(UnicodeData.find(arg));
+            chars = chars.concat(UnicodeData.instance().find(arg));
         }
     }
     var found = false;
@@ -43,12 +43,15 @@ UnicodeData.promise().then(function() {
 
 ## API
 
-The module’s export is an instance of the `UnicodeData` class. It exposes a `get(…)` method that you
-can use to look up detailed information about a character given its Unicode code point numeric
-value. Detailed character information is encapsulated in instances of the `UnicodeCharacter` which
-exposes properties for things such as a human-readable `name` for the character and various flags
-such as its `general` category (e.g., `Lu` meaning “Letter, Uppercase”) and `uppercase`/`lowercase`
-equivalents.
+The module’s exports include all of types exposed by the library and a
+function `UnicodeData.instance()` that returns a global singleton
+instance of the `UnicodeData` class. This class exposes a `get(…)`
+method that you can use to look up detailed information about a
+character given its Unicode code point numeric value. Detailed character
+information is encapsulated in instances of the `UnicodeCharacter` which
+exposes properties for things such as a human-readable `name` for the
+character and various flags such as its `general` category (e.g., `Lu`
+meaning “Letter, Uppercase”) and `uppercase`/`lowercase` equivalents.
 
 You can also search the database using the `UnicodeData.find(…)` method by providing either a
 partial name or by providing a filter function.

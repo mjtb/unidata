@@ -1,18 +1,19 @@
 {
   "name": "mjtb-unidata",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Provides detailed Unicode character data sourced directly from www.unicode.org.",
   "main": "unidata.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "mocha"
   },
   "bin": {
-	  "unidata": "./bin/unidata",
-	  "unichar": "./bin/unichar"
+    "unidata": "./bin/unidata",
+    "unichar": "./bin/unichar"
   },
   "man": {
-	  "unidata": "./man/unidata.1",
-	  "unichar": "./man/unichar.1"
+    "unidata": "./man/unidata.1",
+    "unichar": "./man/unichar.1"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "request": "^2.72.0"
   },
   "devDependencies": {
+    "@types/node": "^8.0.31",
     "mocha": "^2.5.2",
     "should": "^8.4.0"
   }

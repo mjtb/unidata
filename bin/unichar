@@ -15,7 +15,7 @@
  *		0 if one or more characters were ouptut; 1 if no characters were output; >1 on error
  */
 const UnicodeData = require('../unidata.js');
-UnicodeData.promise().then(function() {
+UnicodeData.instance().promise().then(function() {
 	try {
 		let chars = [];
 		let re = /^U\+([0-9A-F]+)$/i;
@@ -28,7 +28,7 @@ UnicodeData.promise().then(function() {
 				chars.push(a);
 			}
 		}
-		let rv = UnicodeData.join(chars);
+		let rv = UnicodeData.instance().join(chars);
 		if(!rv) {
 			process.exit(1);
 		}

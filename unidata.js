@@ -1612,5 +1612,19 @@ if((require.main.filename === __filename) && (process.argv.length > 2) && (proce
 		});
 	});
 } else {
-	module.exports = new UnicodeData();
+	let $_UnicodeData__instance = new UnicodeData();
+	module.exports = {
+		'UnicodeData': UnicodeData,
+		'UnicodeCharacter': UnicodeCharacter,
+		'UnidataHeaders': UnidataHeaders,
+		'ReadyStateChangeEvent': ReadyStateChangeEvent,
+		'DownloadEvent': DownloadEvent,
+		'Fraction': Fraction,
+		'Category': UnicodeData.prototype.Category,
+		'Combining': UnicodeData.prototype.Combining,
+		'Bidirectionality': UnicodeData.prototype.Bidirectionality,
+		'Decomposition': UnicodeData.prototype.Decomposition,
+		'ReadyState': UnicodeData.prototype.ReadyState,
+		'instance': function() { return $_UnicodeData__instance; }
+	}
 }
