@@ -1,6 +1,6 @@
 {
   "name": "mjtb-unidata",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Provides detailed Unicode character data sourced directly from www.unicode.org.",
   "main": "unidata.js",
   "types": "index.d.ts",
@@ -11,10 +11,7 @@
     "unidata": "./bin/unidata",
     "unichar": "./bin/unichar"
   },
-  "man": {
-    "unidata": "./man/unidata.1",
-    "unichar": "./man/unichar.1"
-  },
+  "man": [ "./man/unidata.1", "./man/unichar.1" ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mjtb/unidata.git"
