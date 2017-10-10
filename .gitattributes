@@ -1,0 +1,4 @@
+bin/unichar text eol=lf
+bin/unidata text eol=lf
+man/unichar.1 text eol=lf
+man/unidata.1 text eol=lf
